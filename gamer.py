@@ -1,5 +1,5 @@
 import pygame
-from player import Player
+from sprites import *
 
 class Game():
     def __init__(self, screen):
@@ -9,8 +9,11 @@ class Game():
 
     def entities(self):
         self.all_entities = pygame.sprite.Group()
+        self.bad_boys = pygame.sprite.Group()
         self.player = Player(500, 100)
-        self.all_entities.add(self.player)
+        self.enemy = Enemy(1000,500)
+        self.bad_boys.add(self.enemy)
+        self.all_entities.add(self.player, self.enemy)
 
     def run(self):
         keys = pygame.key.get_pressed()
@@ -18,6 +21,10 @@ class Game():
             self.running = False
         self.all_entities.draw(self.screen)
         self.player.update(20)
+        self.enemy.update(15)
+        if pygame.sprite.spritecollideany(self.player, self.bad_boys):
+            self.player.kill()
+            self.player.live = False
         if keys[pygame.K_LCTRL] and keys[pygame.K_r]:
             self.running = False
             main()
