@@ -10,10 +10,13 @@ class Game():
     def entities(self):
         self.all_entities = pygame.sprite.Group()
         self.bad_boys = pygame.sprite.Group()
+        self.atk = pygame.sprite.Group()
         self.player = Player(500, 100)
         self.enemy = Enemy(1000,500)
+        self.matk = Meele_attack()
+        self.atk.add(self.matk)
         self.bad_boys.add(self.enemy)
-        self.all_entities.add(self.player, self.enemy)
+        self.all_entities.add(self.player, self.enemy, self.matk)
 
     def run(self):
         keys = pygame.key.get_pressed()
@@ -22,6 +25,7 @@ class Game():
         self.all_entities.draw(self.screen)
         self.player.update(20)
         self.enemy.update(15)
+        self.matk.update()
         if pygame.sprite.spritecollideany(self.player, self.bad_boys):
             self.player.kill()
             self.player.live = False
