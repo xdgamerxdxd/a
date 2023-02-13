@@ -1,8 +1,9 @@
 import pygame
 
-global k, c, w
+global c, w
 c = 'skins/characters/'
 w = 'skins/weabone/'
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Player, self).__init__()
@@ -47,6 +48,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.live = True
+
     def update(self, speed):
         k = pygame.key.get_pressed()
         if self.live == True:
@@ -67,40 +69,6 @@ class Enemy(pygame.sprite.Sprite):
 
             if k[pygame.K_s] and self.rect.y < 1080 - self.rect.height:
                 self.rect.y += speed
-
-
-class Meele_attack(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Meele_attack, self).__init__()
-        
-        self.image = pygame.image.load(f'{w}nowepon.png')
-        self.image.set_colorkey((255,255,255))
-
-        self.rect = self.image.get_rect()
-
-
-
-    def update(self):
-        k =  pygame.key.get_pressed()
-        self.atk = False
-        self.image = pygame.image.load(f'{w}nowepon.png')
-        player = Player(1,1)
-        if k[pygame.K_o]:
-            if player.facing == 'right':
-                print('a')
-                self.image = pygame.image.load(f'{w}swor.png')
-                self.image = pygame.transform.scale(self.image, (150, 100))
-                self.rect = self.image.get_rect()
-                self.rect.x = Player.rect.x + 40
-                self.rect.y = Player.rect.y - 50
-                self.atk = True
-            else:
-                self.image = pygame.image.load(f'{w}swol.png')
-                self.image = pygame.transform.scale(self.image, (150, 100))
-                self.rect = self.image.get_rect()
-                self.rect.x = player.rect.x - 200
-                self.rect.y = player.rect.y - 50
-                self.atk = True
             
 class Attack(pygame.sprite.Sprite):
     def __init__(self):
@@ -117,24 +85,41 @@ class Attack(pygame.sprite.Sprite):
         self.counter = 10
         self.facing = ''
 
-    def update(self):
+    def update(self, facing, rectx, recty):
 
         k =  pygame.key.get_pressed()
         # what attack looks like without pushing button
         self.image = pygame.image.load(f'{w}nowepon.png')
 
-        # which way is attack facing
-        if Player.facing == 'right' and self.count == False:
-            self.rect.x = Player.rect.x + 50
-        if Player.facing == 'left' and self.count == False:
-            self.rect.x = Player.rect.x - 55
+        #meele attack
+        if k[pygame.K_o]:
+            if facing == 'right':
+                self.image = pygame.image.load(f'{w}swor.png')
+                self.image = pygame.transform.scale(self.image, (150, 100))
+                self.rect = self.image.get_rect()
+                self.rect.x = rectx + 40
+                self.rect.y = recty - 50
+                self.atk = True
+            elif facing == 'left':
+                self.image = pygame.image.load(f'{w}swol.png')
+                self.image = pygame.transform.scale(self.image, (150, 100))
+                self.rect = self.image.get_rect()
+                self.rect.x = rectx - 200
+                self.rect.y = recty - 50
+                self.atk = True
+
+        #bone attack
+        if facing == 'right' and self.count == False:
+            self.rect.x = rectx + 50
+        if facing == 'left' and self.count == False:
+            self.rect.x = rectx - 55
 
         if k[pygame.K_i] and self.count == False:
             self.count = True
             self.on = True
             self.counter = 10
-            self.rect.y = Player.rect.y - 40
-            if Player.facing == 'right':
+            self.rect.y = recty - 40
+            if facing == 'right':
                 self.facing = 'right'
             else:
                 self.facing = 'left'
