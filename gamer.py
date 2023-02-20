@@ -1,4 +1,5 @@
 import pygame
+from Menu import *
 from sprites import *
 
 class Game():
@@ -21,30 +22,39 @@ class Game():
     def run(self):
         keys = pygame.key.get_pressed()
         self.all_entities.draw(self.screen)
-        if self.player.live == True:
-            self.player.update(20)
-            self.atk.update(self.player.facing, self.player.rect.x, self.player.rect.y)
+        self.player.update(20, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN)
+        self.atk.update(self.player.facing, self.player.rect.x, self.player.rect.y)
         self.enemy.update(15)
         if pygame.sprite.spritecollideany(self.player, self.bad_boys):
+            self.atk.kill()
             self.player.kill()
-            self.player.live = False
 
-        if pygame.sprite.spritecollideany(self.atk, self.bad_boys):
+        if pygame.sprite.spritecollideany(self.enemy, self.attack) and self.atk.atk == True:
             self.enemy.kill()
             
         if keys[pygame.K_ESCAPE]:
-            self.running = False
-            
+            self.menu()
+
         if keys[pygame.K_LCTRL] and keys[pygame.K_r]:
-            self.entities()
+            self.restart()
 
+    def menu(self):
+        menu = main_menu(self.screen)
+        if menu.state == False:
+            menu.state = True
+            pygame.display.set_caption("Minecraft 'real'")
+            pygame.display.set_icon(pygame.image.load('other/a.png'))
+            menu.run(self.restart)
 
+    def restart(self):
+        self.entities()
 
-def main():
+def game():
 
     pygame.init()
 
-    screen = pygame.display.set_mode((1920, 1080))
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_icon(pygame.image.load('other/b.png'))
     clock = pygame.time.Clock()
 
     game = Game(screen)
@@ -58,8 +68,8 @@ def main():
         game.run()
 
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(30)
         pygame.display.flip()
 
     pygame.quit()
-main()
+game()
