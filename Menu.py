@@ -13,9 +13,9 @@ def draw_text(text, font, color, surface, x, y):
     textrect.center = (x, y)
     surface.blit(textobj, textrect)
 
-class image_button_maker():
+class Image_button_maker():
     def __init__(self, img, surface, x, y):
-        super(image_button_maker, self).__init__()
+        super(Image_button_maker, self).__init__()
         self.surface = surface
         self.image = pygame.image.load(img)
         self.rect = self.image.get_rect()
@@ -35,8 +35,8 @@ class main_menu():
         global font
         font = pygame.font.SysFont('Monocraft', 100)
         bfont = pygame.font.SysFont('Monocraft', 40)
-        i = image_button_maker('other/c.png', self.screen, 0, 490)
-        e = image_button_maker('other/d.png', self.screen, 1500, 676)
+        i = Image_button_maker('other/c.png', self.screen, 0, 490)
+        e = Image_button_maker('other/d.png', self.screen, 1500, 676)
         click = False
         while self.state:
 
@@ -61,6 +61,7 @@ class main_menu():
             if button1.collidepoint((mx, my)):
                 if click:
                     function()
+                    pygame.display.set_caption("Game")
                     self.state = False
             if i.rect.collidepoint((mx, my)):
                 if click:
@@ -80,7 +81,7 @@ class main_menu():
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE and self.state == True:
                         self.state = False
-                        pygame.display.set_icon(pygame.image.load('other/b.png'))
+                        #pygame.display.set_icon(pygame.image.load('other/b.png'))
                         pygame.display.set_caption("Game")
-                        time.sleep(0.08)
+                        time.sleep(0.1)
             pygame.display.update()
