@@ -9,7 +9,7 @@ pir = 'skins/characters/player/idre/'
 pil = 'skins/characters/player/idle/'
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, type, x, y):
+    def __init__(self, type, x, y, prect):
         super(Player, self).__init__()
 
 
@@ -36,9 +36,12 @@ class Player(pygame.sprite.Sprite):
         self.wants_jump = False
         self.gravity = False
         self.positiony = y
+        self.fall = y
         self.ground = y
+        self.prect = prect
         self.jumpy = False
         self.fally = False
+        self.cstand = False
 
     def update(self, speed, left, right, up):
         k = pygame.key.get_pressed()
@@ -100,6 +103,12 @@ class Player(pygame.sprite.Sprite):
             if self.rect.y >= self.ground:
                 self.gravity = False
                 self.fally = False
+                self.positiony = self.rect.y
+            elif self.rect == self.prect:
+                self.gravity = False
+                self.fally = False
+                self.positiony = self.rect.y
+        print(self.rect)
 
             
 class Attack(pygame.sprite.Sprite):
@@ -137,3 +146,13 @@ class Attack(pygame.sprite.Sprite):
                 self.atk = True
         else:
             self.image = pygame.image.load(f'{w}nowepon.png')
+
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, x, y, img):
+        super(Platform, self).__init__()
+        self.img = img
+        self.image = pygame.image.load(img)
+        self.image.set_colorkey((255,255,255))
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x

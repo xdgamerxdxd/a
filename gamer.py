@@ -13,14 +13,15 @@ class Game():
         self.bad_boys = pygame.sprite.Group()
         self.eattack = pygame.sprite.Group()
         self.attack = pygame.sprite.Group()
-        self.player = Player('p', 500, 860)
-        self.enemy = Player('e',1000,720)
+        self.platform = Platform(350, 450, 'other/platform.png')
+        self.player = Player('p', 500, 860, self.platform.rect)
+        self.enemy = Player('e',1000,720, self.platform.rect)
         self.atk = Attack()
         self.eatk = Attack()
         self.attack.add(self.atk)
         self.eattack.add(self.eatk)
         self.bad_boys.add(self.enemy)
-        self.all_entities.add(self.player, self.enemy, self.atk, self.eatk)
+        self.all_entities.add(self.player, self.enemy, self.atk, self.eatk, self.platform)
 
     def run(self):
         keys = pygame.key.get_pressed()
@@ -29,7 +30,6 @@ class Game():
         self.atk.update(self.player.facing, self.player.rect.x, self.player.rect.y, pygame.K_o, 'p')
         self.enemy.update(15, pygame.K_a, pygame.K_d, pygame.K_w)
         self.eatk.update(self.enemy.facing, self.enemy.rect.x, self.enemy.rect.y, pygame.K_t, 'e')
-
         if pygame.sprite.spritecollideany(self.player, self.bad_boys):
             self.atk.kill()
             self.player.kill()
@@ -69,8 +69,8 @@ def game():
     game = Game(screen)
     
     while game.running:
-        #screen.fill([0, 0, 0])
-        screen.blit(image, (0,0))
+        screen.fill([21, 100, 0])
+        #screen.blit(image, (0,0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game.running = False
