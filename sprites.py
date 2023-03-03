@@ -34,9 +34,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.wants_jump = False
-        self.wants_down = False
+        self.gravity = False
+        self.positiony = y
+        self.ground = y
+        self.jumpy = False
+        self.fally = False
 
-    def update(self, speed, left, right, up, down):
+    def update(self, speed, left, right, up):
         k = pygame.key.get_pressed()
         # Idle animation here
         self.idlecount += 1
@@ -63,7 +67,6 @@ class Player(pygame.sprite.Sprite):
                     self.image = pygame.image.load(f'{p}char.png')
                     self.rect.x += speed
                     self.facing = 'right'
-                            # Make thing go up (Jump up)
         # makes character enemy
         else:
              if k[left] and self.rect.x > 0:
@@ -75,25 +78,29 @@ class Player(pygame.sprite.Sprite):
                 self.image = pygame.image.load(f'{c}filenamel.png')
                 self.rect.x += speed
                 self.facing = 'right'
+        # This make the thingie go uppy
+        if k[up] and self.fally == False:
+            self.jumpy = True
 
-        if k[up] and self.rect.y > 0 and self.wants_down == False:
-            self.wants_jump = True
-        if self.wants_jump == True:
-            if self.rect.y > 800:
+        if self.jumpy == True:
+            if self.rect.y > self.positiony - 300:  
                 self.rect.y -= speed
-            if self.rect.y > 780:
+            if self.rect.y > self.positiony - 350:
                 self.rect.y -= speed / 2
-            if self.rect.y > 700:
+            if self. rect.y > self.positiony - 400:
                 self.rect.y -= speed / 4
-            if self.rect.y == 700:
-                self.wants_jump = False
-                self.wants_down = True
 
-        # Make thing to down (Fall down)
-        if self.wants_down == True and self.rect.y < 860:
+        if k[up] == False and self.jumpy == True or self.rect.y <= self.positiony - 400:
+            self.jumpy = False
+            self.gravity = True
+            self.fally = True
+        
+        if self.gravity == True:
             self.rect.y += speed
-            if self.rect.y == 860:
-                self.wants_down = False
+            if self.rect.y >= self.ground:
+                self.gravity = False
+                self.fally = False
+
             
 class Attack(pygame.sprite.Sprite):
     def __init__(self):

@@ -25,9 +25,9 @@ class Game():
     def run(self):
         keys = pygame.key.get_pressed()
         self.all_entities.draw(self.screen)
-        self.player.update(20, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN )
+        self.player.update(20, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP )
         self.atk.update(self.player.facing, self.player.rect.x, self.player.rect.y, pygame.K_o, 'p')
-        self.enemy.update(15, pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s)
+        self.enemy.update(15, pygame.K_a, pygame.K_d, pygame.K_w)
         self.eatk.update(self.enemy.facing, self.enemy.rect.x, self.enemy.rect.y, pygame.K_t, 'e')
 
         if pygame.sprite.spritecollideany(self.player, self.bad_boys):
@@ -64,11 +64,13 @@ def game():
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     clock = pygame.time.Clock()
+    image = pygame.image.load('other/background.jpg').convert_alpha()
 
     game = Game(screen)
     
     while game.running:
-        screen.fill([0, 0, 0])
+        #screen.fill([0, 0, 0])
+        screen.blit(image, (0,0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game.running = False
