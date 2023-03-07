@@ -9,7 +9,7 @@ pir = 'skins/characters/player/idre/'
 pil = 'skins/characters/player/idle/'
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, type, x, y, prect):
+    def __init__(self, type, x, y):
         super(Player, self).__init__()
 
 
@@ -38,7 +38,6 @@ class Player(pygame.sprite.Sprite):
         self.positiony = y
         self.fall = y
         self.ground = y
-        self.prect = prect
         self.jumpy = False
         self.fally = False
         self.cstand = False
@@ -47,7 +46,6 @@ class Player(pygame.sprite.Sprite):
         k = pygame.key.get_pressed()
         # Idle animation here
         self.idlecount += 1
-
         if self.idlecount >= len(self.idre):
             self.idlecount = 0
         # makes character player
@@ -104,11 +102,6 @@ class Player(pygame.sprite.Sprite):
                 self.gravity = False
                 self.fally = False
                 self.positiony = self.rect.y
-            elif self.rect == self.prect:
-                self.gravity = False
-                self.fally = False
-                self.positiony = self.rect.y
-        print(self.rect)
 
             
 class Attack(pygame.sprite.Sprite):
@@ -146,13 +139,3 @@ class Attack(pygame.sprite.Sprite):
                 self.atk = True
         else:
             self.image = pygame.image.load(f'{w}nowepon.png')
-
-class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y, img):
-        super(Platform, self).__init__()
-        self.img = img
-        self.image = pygame.image.load(img)
-        self.image.set_colorkey((255,255,255))
-        self.rect = self.image.get_rect()
-        self.rect.y = y
-        self.rect.x = x

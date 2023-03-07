@@ -13,15 +13,14 @@ class Game():
         self.bad_boys = pygame.sprite.Group()
         self.eattack = pygame.sprite.Group()
         self.attack = pygame.sprite.Group()
-        self.platform = Platform(350, 450, 'other/platform.png')
-        self.player = Player('p', 500, 860, self.platform.rect)
-        self.enemy = Player('e',1000,720, self.platform.rect)
+        self.player = Player('p', 500, 860)
+        self.enemy = Player('e',1000,720)
         self.atk = Attack()
         self.eatk = Attack()
         self.attack.add(self.atk)
         self.eattack.add(self.eatk)
         self.bad_boys.add(self.enemy)
-        self.all_entities.add(self.player, self.enemy, self.atk, self.eatk, self.platform)
+        self.all_entities.add(self.player, self.enemy, self.atk, self.eatk)
 
     def run(self):
         keys = pygame.key.get_pressed()
